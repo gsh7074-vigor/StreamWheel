@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>视频拉流加速</h1>
+    <div class="host" id="host">—</div>
+  </header>
+
+  <div class="switch-row">
+    <div class="switch-label">
+      <strong>启用加速</strong>
+      <span>关闭后立即停止所有预取请求</span>
+    </div>
+    <button class="switch" id="toggle" role="switch" aria-checked="true">
+      <span class="knob"></span>
+    </button>
+  </div>
+
+  <div class="stat" id="stat">
+    <div class="stat-main" id="statMain">—</div>
+    <div class="stat-sub" id="statSub">本页尚未开始播放</div>
+  </div>
+
+  <div class="diag" id="diag" hidden></div>
+
+  <div class="cache" id="cache" hidden>
+    <div class="cache-head"><b>缓存判定</b><span id="cacheLabel">—</span></div>
+    <div class="cache-desc" id="cacheDesc">—</div>
+    <button class="probe" id="probeBtn">实测是否命中</button>
+    <div class="probe-result" id="probeResult" hidden></div>
+  </div>
+
+  <div class="switch-row small" style="margin-top:0">
+    <div class="switch-label">
+      <strong>存着慢慢看</strong>
+      <span>后台把整片存进缓存，之后随便拖都不卡</span>
+    </div>
+    <button class="switch small" id="whole" role="switch" aria-checked="false">
+      <span class="knob"></span>
+    </button>
+  </div>
+
+  <div class="switch-row small" style="margin-top:8px">
+    <div class="switch-label">
+      <strong>立刻享受</strong>
+      <span>点进度条哪里，就先缓冲哪一段</span>
+    </div>
+    <button class="switch small" id="instant" role="switch" aria-checked="false">
+      <span class="knob"></span>
+    </button>
+  </div>
+
+  <p class="hint" style="margin:-4px 0 14px">
+    「存着慢慢看」仅点播有效，开启前自动验证缓存命中，未命中会跳过以免白耗流量，
+    单次上限 <b>150 MB</b>。「立刻享受」只调整下载顺序，不额外下载整片，几乎不增加总流量。
+    <b>两者互斥</b>：打开其中一个，另一个会自动关闭；关掉当前这个，两个都保持关闭。
+  </p>
+
+  <div class="field">
+    <label>预取深度 <b id="depthVal">4</b> 段</label>
+    <input type="range" id="depth" min="1" max="12" step="1" value="4" />
+    <p class="hint">往后提前拉多少段。太大等于跟当前播放抢带宽。</p>
+  </div>
+
+  <div class="field">
+    <label>并发连接 <b id="concVal">3</b> 条</label>
+    <input type="range" id="conc" min="1" max="6" step="1" value="3" />
+    <p class="hint">同时拉几段。单连接限速时调高才有效；链路本身够快就别调。</p>
+  </div>
+
+  <div class="switch-row small">
+    <div class="switch-label">
+      <strong>显示页面角标</strong>
+      <span>左下角显示预取段数与流量</span>
+    </div>
+    <button class="switch small" id="hud" role="switch" aria-checked="true">
+      <span class="knob"></span>
+    </button>
+  </div>
+
+  <footer>
+    <button class="ghost" id="reset">重置本页统计</button>
+    <a class="note" href="#" id="hintLink">能做什么？</a>
+  </footer>
+
+  <div class="explain" id="explain" hidden>
+    <p><strong>它做的事：</strong>播放器通常一条连接顺序取分片。本扩展把后续几段用多条连接并发拉进浏览器缓存，播放器再请求时直接命中缓存，等效于用多连接抢带宽。</p>
+    <p><strong>它做不到：</strong>增加你的宽带；突破平台会员限速；让 CDN 对单 IP 的总配额变大。</p>
+    <p><strong>不生效的信号：</strong>角标一直显示「未发现分片流」或「预取失败」。前者是容器/加密流，后者是跨域或鉴权被拦。CDN 返回 <code>no-store</code> 时预取不会命中缓存，等于白拉流量。</p>
+  </div>
+
+</div>
+<script src="popup.js"></script>
+</body>
+</html>
