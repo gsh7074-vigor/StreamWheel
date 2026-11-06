@@ -213,7 +213,7 @@ StreamWheel/                      项目名：老司机方向盘
 ## 自己维护 / 以后怎么更新
 
 ```bash
-git clone https://github.com/gsh7074-vigor/Browser-plug-in-Repository.git
+git clone https://github.com/gsh7074-vigor/StreamWheel.git
 cd video-stream-boost
 
 # 改完代码后
