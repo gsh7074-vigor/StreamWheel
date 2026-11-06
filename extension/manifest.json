@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "视频拉流加速",
+  "version": "1.0.7",
+  "description": "替播放器做并发分片预取：把后续分片提前拉进缓存，减少缓冲等待。可随时开关。",
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "视频拉流加速"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "all_frames": true,
+      "run_at": "document_idle",
+      "js": [
+        "lib.js",
+        "content.js"
+      ]
+    }
+  ]
+}
