@@ -47,7 +47,7 @@ description_en: Diagnose which layer throttles video streaming, then pick the ri
 
 ```bash
 python3 skill/scripts/speed_probe.py "<媒体直链>" --levels 1,4,8,16 --seconds 6
-python3 skill/scripts/probe.sh                       # 不带参数 = 内置 100MB 自测
+bash skill/scripts/probe.sh                         # 不带参数 = 内置 100MB 自测
 ```
 
 直链从播放页 DevTools → Network → 过滤 `media` / `m3u8` 里取一条 `.ts` / `.m4s` / `.mp4`。
